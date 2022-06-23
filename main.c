@@ -31,7 +31,7 @@ int main(int argc, char  *argv[])
 		philos = init_philos(argv, argc, philos);
 		circle_philos(philos);
 		create_threads(philos,info);
-        check_if_did(philos);
+        // check_if_did(philos);
 
 
 	}
