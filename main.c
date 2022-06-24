@@ -1,42 +1,20 @@
 #include "header.h"
  
-void	check_if_did(t_philo *philo)
-{
-	int	x;
-
-	x = 0;
-	while (x < philo[0].number_of_philo)
-	{
-		if ((get_time() - philo[x].p_info->start) - philo[x].p_info->last_time_eat
-			>= philo[x].p_info->last_time_eat+ philo[x].p_info->time_to_die)
-		{
-			 
-             printf("did\n");
-			// pthread_mutex_lock(&philo[x].p);
-			break ;
-		}
-	}
-}
+ 
 
 int main(int argc, char  *argv[])
 {
-	printf("\n");
-	 
+	t_philo ph;
+	t_philo *philos;
+	t_philo_info *infos;
+	char *error;
+
+	error = init_info_of_philos(argv,argc, infos);
+	if(error)
+		printf("%s\n", error);
 	
-	if (argc == 5 || argc == 6)
-	{
-		t_philo *philos;
-		t_philo_info *info;
-  
-		philos = init_philos(argv, argc, philos);
-		circle_philos(philos);
-		create_threads(philos,info);
-        // check_if_did(philos);
 
-
-	}
-	else
-		printf("ERROR");
+	 
 	return 0;
 }
  

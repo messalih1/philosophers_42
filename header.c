@@ -1,6 +1,6 @@
 #include "header.h"
 
-static int	ft_isdigit(int c)
+  int	ft_isdigit(int c)
 {
 	while (c >= 48 && c <= 57)
 	{
