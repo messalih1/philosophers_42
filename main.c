@@ -4,17 +4,21 @@
 
 int main(int argc, char  *argv[])
 {
-	t_philo ph;
+	t_philo_info ph;
 	t_philo *philos;
 	t_philo_info *infos;
+	infos = &ph;
 	char *error;
 
 	error = init_info_of_philos(argv,argc, infos);
 	if(error)
-		printf("%s\n", error);
+		return(printf("%s\n", error), 0);
+	philos = malloc(sizeof(t_philo) * ft_atoi(argv[1]));
+	infos->start = get_time();
+	fill_philos_infos(philos, infos, argv);
+	circle_philos(philos); 
 	
-
-	 
+	
 	return 0;
 }
  

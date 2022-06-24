@@ -10,11 +10,11 @@
 typedef struct infos
 {
     long start;
-    unsigned int time_to_die;
-    unsigned int time_to_eat;
-    unsigned int time_to_sleep;
-    unsigned int t_must_eat;
-    unsigned int take_fork;
+     int time_to_die;
+     int time_to_eat;
+     int time_to_sleep;
+     int t_must_eat;
+     int take_fork;
     long last_time_eat;
     long muts_eat;
     
@@ -48,6 +48,7 @@ long	get_time(void);
 
 int	ft_isdigit(int i);
 
+void	fill_philos_infos(t_philo *philos, t_philo_info *infos, char **argv);
 // void *philosophers(void *p);
 void create_threads(t_philo *philos,t_philo_info *info);
 
