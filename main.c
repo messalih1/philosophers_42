@@ -1,68 +1,57 @@
-#include "header.h"
- 
- 
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: messalih <messalih@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/06/24 21:03:39 by messalih          #+#    #+#             */
+/*   Updated: 2022/06/24 21:30:05 by messalih         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-int main(int argc, char  *argv[])
+#include "philo.h"
+
+void	check_philo_dead(t_philo *philo)
 {
-	t_philo_info ph;
-	t_philo *philos;
-	t_philo_info *infos;
-	infos = &ph;
-	char *error;
+	int	x;
 
-	error = init_info_of_philos(argv,argc, infos);
-	if(error)
-		return(printf("%s\n", error), 0);
-	philos = malloc(sizeof(t_philo) * ft_atoi(argv[1]));
-	infos->start = get_time();
-	fill_philos_infos(philos, infos, argv);
-	circle_philos(philos); 
-	
-	
-	return 0;
+	x = 0;
+	while (x < philo[0].infos->number_of_philos)
+	{
+		if ((get_time() - philo[x].infos->start) - philo[x].last_time_eat
+			>= philo[x].last_time_eat + philo[x].infos->time_to_die)
+		{
+			philo[x].infos->dead = 1;
+			ft_print("%ld %d died\n", (get_time() - philo[x].infos->start),
+				philo[x].index, &philo[x].infos->t_pen);
+			pthread_mutex_lock(&philo[x].infos->t_pen);
+			break ;
+		}
+		if (philo[x].infos->exit == philo[x].infos->number_of_philos)
+			break ;
+		x++;
+		if (philo[0].infos->number_of_philos == x)
+			x = 0;
+	}
 }
- 
- 
 
+int	main(int argc, char **argv)
+{
+	char	*check;
+	t_infos	infos;
+	t_philo	*philos;
 
-
-
-
-
-
-		
-
-
-	// struct timeval start, end;
-	
-	// pthread_mutex_lock(&philos->forks);
-	
-	// printf("philosopher %d has taken a fork\n",philos->index + 1);
-	
-	// pthread_mutex_lock(philos->next_forks);
-	
- 	// gettimeofday(&start, NULL);
-	// usleep(philos->p_info->time_to_eat * 1000);
-	// printf("philosopher %d has taken a fork\n",philos->index + 1);
-
-
-	// printf("philosopher %d eating...\n",philos->index + 1);	
-
-	 
-	// pthread_mutex_unlock(&philos->forks);
-	 
-	// pthread_mutex_unlock(philos->next_forks);
-	 
-	// printf("philosopher %d sleeping...\n",philos->index + 1);
-	
-	// usleep(philos->p_info->time_to_sleep * 1000);
-	
-	// gettimeofday(&end, NULL);
-
-	// long seconds = (end.tv_sec - start.tv_sec);
-    // long micros = ((seconds * 1000000) + end.tv_usec) - (start.tv_usec);
-
-	// philos->time_creation = micros;
-	
-	// get_time(philos->time_creation,philos);
-	// printf("philosopher %d thinking\n",philos->index + 1);
+	check = init_philos(argc, argv, &infos);
+	if (check)
+		return (printf("%s", check), 1);
+	philos = malloc(sizeof(t_philo) * (infos.number_of_philos));
+	infos.start = get_time();
+	fill_infos_philos(philos, &infos);
+	circle_philos(philos);
+	if (create_philos(&infos, philos))
+		return (printf("ERROR: can't create a thread\n"), 1);
+	check_philo_dead(philos);
+	destroy_mutex(philos);
+	return (0);
+}
